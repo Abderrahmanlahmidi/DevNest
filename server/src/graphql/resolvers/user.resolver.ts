@@ -16,8 +16,8 @@ export const userResolvers = {
             if (existingUser) throw new Error("Email already registered");
 
             const hashedPassword = await bcrypt.hash(password, 10);
-
             const newUser = new User({firstName, lastName, email, password: hashedPassword});
+            
             return await newUser.save();
         },
 

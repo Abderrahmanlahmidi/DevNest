@@ -4,7 +4,7 @@ export const skillTypeDefs = gql`
   type Skill {
     _id: ID!
     name: String!
-    level: Int
+    level: String
     category: String
     description: String
     icon: String
@@ -15,12 +15,13 @@ export const skillTypeDefs = gql`
 
   extend type Query {
     userSkills(userId: ID!): [Skill!]!
+    allSkills: [Skill]
   }
 
   extend type Mutation {
     createSkill(
       name: String!
-      level: Int
+      level: String
       category: String
       description: String
       icon: String
@@ -30,7 +31,7 @@ export const skillTypeDefs = gql`
     updateSkill(
       id: ID!
       name: String
-      level: Int
+      level: String
       category: String
       description: String
       icon: String

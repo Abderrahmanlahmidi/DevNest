@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface ISkill extends Document {
     name: string;
-    level?: number;
+    level?: string;
     category?: string;
     description?: string;
     icon?: string;
@@ -12,7 +12,7 @@ export interface ISkill extends Document {
 const skillSchema = new Schema<ISkill>(
     {
         name:        { type: String, required: true },
-        level:       { type: Number},
+        level:       { type: String},
         category:    { type: String },
         description: { type: String },
         icon:        { type: String },

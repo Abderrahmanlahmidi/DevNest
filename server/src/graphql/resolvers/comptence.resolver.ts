@@ -1,4 +1,4 @@
-import Competence from "../../models/Competence";
+import Competence from "../../models/Competence.ts";
 
 export const competenceResolvers = {
     Query: {
