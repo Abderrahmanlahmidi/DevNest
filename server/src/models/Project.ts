@@ -1,12 +1,11 @@
 import mongoose, {Schema, Document, Types} from "mongoose";
 
-
 export interface IProject extends Document {
   title: string;
   description?: string;
   technologies?: string;
   startDate?: Date;
-  status: "ongoing" | "completed" | "paused";
+  status: "Planning" | "In Progress" | "Completed";
   githubUrl?: string;
   liveUrl?: string;
   image?: string;
@@ -21,8 +20,8 @@ const projectSchema = new Schema<IProject>(
     startDate:    { type: Date },
     status: {
       type: String,
-      enum: ["ongoing", "completed", "paused"],
-      default: "ongoing",
+      enum: ["Planning", "In Progress", "Completed"],
+      default: "Planning",
     },
     githubUrl:    { type: String },
     liveUrl:      { type: String },

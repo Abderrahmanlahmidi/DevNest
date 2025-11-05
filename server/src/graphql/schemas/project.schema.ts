@@ -18,6 +18,7 @@ export const projectTypeDefs = gql`
 
   type Query {
     getUserProjects(userId: ID!): [Project!]!
+    allProjects:[Project]
   }
 
   type Mutation {

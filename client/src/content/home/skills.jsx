@@ -6,7 +6,8 @@ import {
 } from "../../constants/skillsConstants";
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
-import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { usePagination } from "../../components/usePagination";
+
 
 const GET_SKILLS = gql`
   query {
@@ -23,14 +24,13 @@ const GET_SKILLS = gql`
 
 const Skills = () => {
   const { data } = useQuery(GET_SKILLS);
-  const [page, setPage] = useState(1);
-  const limit = 4;
 
   console.log("skills", data?.allSkills);
 
-  const skills = data?.allSkills || [];
-  const startIndex = (page - 1) * limit;
-  const currentSkills = skills.slice(startIndex, startIndex + limit);
+  const skills = data?.allSkills;
+
+  const {viewBar, current} = usePagination(skills, 4)
+
 
   return (
     <section id="skills" className="py-20 bg-gray-50 px-4 sm:px-6 lg:px-8">
@@ -49,7 +49,7 @@ const Skills = () => {
 
         {/* Skills Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {currentSkills.map((skill, index) => (
+          {current.map((skill) => (
             <div
               key={skill._id}
               className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:border-gray-300 group"
@@ -87,31 +87,10 @@ const Skills = () => {
             </div>
           ))}
         </div>
-
         {/* Simple Pagination */}
-        <div className="flex items-center gap-4 mt-8 justify-center">
-          <button
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-            disabled={page === 1}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-          >
-            <FiChevronLeft className="w-4 h-4" />
-            Previous
-          </button>
-
-          <span className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg">
-            Page {page} of {Math.ceil(skills.length / limit)}
-          </span>
-
-          <button
-            onClick={() => setPage((prev) => prev + 1)}
-            disabled={startIndex + limit >= skills.length}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-          >
-            Next
-            <FiChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+        <>
+         {viewBar}
+        </>
       </div>
     </section>
   );

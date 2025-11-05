@@ -10,6 +10,9 @@ export const projectResolvers = {
                 throw new Error("Failed to fetch projects");
             }
         },
+        allProjects: async () => {
+            return await Project.find();
+        }
     },
 
     Mutation: {

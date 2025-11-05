@@ -11,8 +11,6 @@ import {
 } from 'react-icons/si';
 import { 
   FiCode, 
-  FiDatabase, 
-  FiCloud, 
   FiSmartphone, 
   FiServer, 
   FiLayers 
