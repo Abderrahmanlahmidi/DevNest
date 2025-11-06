@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiHeart, FiChevronUp  } from 'react-icons/fi';
+import { socialLinks } from '../../constants/socialMedia';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -20,13 +21,13 @@ const Footer = () => {
                         </p>
                         <div className="flex items-center gap-4">
                             <a 
-                                href="mailto:hello@devnest.com"
+                                href={socialLinks.gmailLink}
                                 className="text-gray-400 hover:text-gray-600 transition-colors duration-300 p-2 hover:bg-white rounded-lg"
                             >
                                 <FiMail className="text-lg" />
                             </a>
                             <a 
-                                href="https://github.com"
+                                href={socialLinks.githubLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-gray-600 transition-colors duration-300 p-2 hover:bg-white rounded-lg"
@@ -34,7 +35,7 @@ const Footer = () => {
                                 <FiGithub className="text-lg" />
                             </a>
                             <a 
-                                href="https://linkedin.com"
+                                href={socialLinks.linkedinLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-gray-600 transition-colors duration-300 p-2 hover:bg-white rounded-lg"
@@ -42,7 +43,7 @@ const Footer = () => {
                                 <FiLinkedin className="text-lg" />
                             </a>
                             <a 
-                                href="https://twitter.com"
+                                href={socialLinks.twitterLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-gray-600 transition-colors duration-300 p-2 hover:bg-white rounded-lg"
@@ -100,7 +101,7 @@ const Footer = () => {
                                     href="mailto:hello@devnest.com"
                                     className="text-gray-500 hover:text-gray-700 transition-colors duration-300 text-sm"
                                 >
-                                    hello@devnest.com
+                                    {socialLinks.gmail}
                                 </a>
                             </li>
                             <li>
@@ -108,12 +109,12 @@ const Footer = () => {
                                     href="tel:+1234567890"
                                     className="text-gray-500 hover:text-gray-700 transition-colors duration-300 text-sm"
                                 >
-                                    +1 (234) 567-890
+                                   {socialLinks.numberPhone}
                                 </a>
                             </li>
                             <li>
                                 <span className="text-gray-500 text-sm">
-                                    Based in San Francisco, CA
+                                   {socialLinks.address}
                                 </span>
                             </li>
                             <li>

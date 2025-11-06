@@ -14,7 +14,7 @@ export const competenceTypeDefs = gql`
 
   type Query {
     getUserCompetences(userId: ID!): [Competence!]!
-    allCompetences: [Competence]!
+    allCompetences:[Competence]
   }
 
   type Mutation {

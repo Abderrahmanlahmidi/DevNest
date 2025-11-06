@@ -1,80 +1,21 @@
 import React from 'react';
 import { FiCalendar, FiMapPin, FiBriefcase } from 'react-icons/fi';
+import {getTypeColor, formatDate} from "../../constants/experiencesConstants.jsx"
+import { querySchemas } from "../../constants/graphQl/graphQlSchemas.jsx";
+import { useQueryQl } from "../../constants/graphQl/useGraphQl.jsx";
+import { downloadDocument } from "../../constants/downloadDocument";
+
+
 
 const Experiences = () => {
-    const experiences = [
-        {
-            title: "Senior Full Stack Developer",
-            company: "TechInnovate Inc.",
-            startDate: "2022-03",
-            endDate: "Present",
-            description: "Lead development of scalable web applications using React, Node.js, and cloud technologies. Mentor junior developers and implement best practices for code quality and performance optimization.",
-            location: "San Francisco, CA",
-            type: "Full-time"
-        },
-        {
-            title: "Frontend Developer",
-            company: "Digital Solutions LLC",
-            startDate: "2020-06",
-            endDate: "2022-02",
-            description: "Developed responsive user interfaces for client projects using React and Vue.js. Collaborated with design teams to implement pixel-perfect designs and improve user experience.",
-            location: "Remote",
-            type: "Full-time"
-        },
-        {
-            title: "Software Engineer Intern",
-            company: "StartUp Ventures",
-            startDate: "2019-01",
-            endDate: "2019-12",
-            description: "Built and maintained RESTful APIs, implemented new features for the main product, and participated in agile development processes with daily stand-ups and sprint planning.",
-            location: "New York, NY",
-            type: "Internship"
-        },
-        {
-            title: "Full Stack Developer",
-            company: "Freelance",
-            startDate: "2018-09",
-            endDate: "2020-05",
-            description: "Worked with various clients to develop custom web applications, e-commerce solutions, and business websites. Managed projects from conception to deployment.",
-            location: "Remote",
-            type: "Freelance"
-        },
-        {
-            title: "Junior Web Developer",
-            company: "WebCraft Studio",
-            startDate: "2017-03",
-            endDate: "2018-08",
-            description: "Created and maintained websites for small businesses using HTML, CSS, JavaScript, and WordPress. Provided technical support and implemented SEO best practices.",
-            location: "Boston, MA",
-            type: "Full-time"
-        },
-        {
-            title: "Web Development Bootcamp",
-            company: "Code Academy",
-            startDate: "2016-09",
-            endDate: "2017-02",
-            description: "Completed intensive full-stack web development program covering modern technologies including JavaScript, React, Node.js, and database management.",
-            location: "Chicago, IL",
-            type: "Education"
-        }
-    ];
+  const url = "../../../src/assets/documents/Abderrahmane-Lahmidi.pdf";
 
-    const getTypeColor = (type) => {
-        switch (type) {
-            case 'Full-time': return 'bg-blue-100 text-blue-800';
-            case 'Part-time': return 'bg-green-100 text-green-800';
-            case 'Internship': return 'bg-purple-100 text-purple-800';
-            case 'Freelance': return 'bg-orange-100 text-orange-800';
-            case 'Education': return 'bg-pink-100 text-pink-800';
-            default: return 'bg-gray-100 text-gray-800';
-        }
-    };
+  const { data } = useQueryQl(querySchemas.getExperiences);
+  const experiences = data?.allExperiences || [];
 
-    const formatDate = (dateString) => {
-        if (dateString === 'Present') return 'Present';
-        const date = new Date(dateString + '-01');
-        return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    };
+  console.log(experiences)
+
+    
 
     return (
         <section className="py-20 bg-white px-4 sm:px-6 lg:px-8" id="experiences">
@@ -152,7 +93,9 @@ const Experiences = () => {
                     <p className="text-gray-500 mb-6">
                         Interested in working together?
                     </p>
-                    <button className="border border-gray-300 text-gray-600 px-8 py-3 rounded-full text-sm font-normal hover:border-gray-400 hover:text-gray-700 transition-all duration-300">
+                    <button onClick={() => {
+                        downloadDocument(url)
+                    }} className="border cursor-pointer border-gray-300 text-gray-600 px-8 py-3 rounded-full text-sm font-normal hover:border-gray-400 hover:text-gray-700 transition-all duration-300">
                         Download Resume
                     </button>
                 </div>
