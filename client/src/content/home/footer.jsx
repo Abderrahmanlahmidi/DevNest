@@ -8,9 +8,9 @@ const Footer = () => {
     return (
         <footer className="bg-gray-50 border-t border-gray-200 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
-                {/* Main Footer Content */}
+
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                    {/* Brand Section */}
+
                     <div className="md:col-span-2">
                         <h3 className="text-2xl font-light text-gray-800 mb-4">
                             <span className="text-gray-600">Dev</span>Nest
@@ -53,7 +53,7 @@ const Footer = () => {
                         </div>
                     </div>
 
-                    {/* Quick Links */}
+
                     <div>
                         <h4 className="text-gray-800 font-medium mb-4 text-sm uppercase tracking-wider">Navigation</h4>
                         <ul className="space-y-3">
@@ -92,7 +92,7 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    {/* Contact Info */}
+
                     <div>
                         <h4 className="text-gray-800 font-medium mb-4 text-sm uppercase tracking-wider">Get In Touch</h4>
                         <ul className="space-y-3">
@@ -126,7 +126,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Bottom Bar */}
+
                 <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
                     <div className="text-gray-400 text-sm flex items-center gap-1">
                         <span>© {currentYear} DevNest. Made with</span>
@@ -151,7 +151,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Back to Top Button */}
+
                 <button 
                     onClick={() => window.scrollTo({ top: 0 })}
                     className="fixed bottom-8 right-8 bg-white border border-gray-300 text-gray-500 p-3 rounded-full shadow-sm hover:shadow-md hover:text-gray-700 hover:border-gray-400 transition-all duration-300"

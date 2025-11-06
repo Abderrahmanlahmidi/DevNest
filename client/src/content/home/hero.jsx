@@ -13,7 +13,7 @@ const Hero = () => {
       className="min-h-screen bg-white flex items-center justify-center px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-6xl mx-auto text-center">
-        {/* Profile Image */}
+
         <div className="mb-8 flex justify-center">
           <div className="relative">
             <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center border border-gray-200">
@@ -29,7 +29,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Main Heading */}
+
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-light text-gray-800 mb-4 tracking-tight">
           Hello, I'm{" "}
           <span className="text-gray-600 font-normal">
@@ -37,7 +37,7 @@ const Hero = () => {
           </span>
         </h1>
 
-        {/* Subtitle */}
+
         <p className="text-xl sm:text-2xl text-gray-500 mb-8 font-light max-w-3xl mx-auto leading-relaxed">
           Full-Stack Developer & UI/UX Enthusiast
           <span className="block text-lg text-gray-400 mt-2">
@@ -45,14 +45,14 @@ const Hero = () => {
           </span>
         </p>
 
-        {/* Description */}
+
         <p className="text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed text-lg">
           I specialize in creating responsive, user-friendly web applications
           using React, Node.js, and modern development practices. Currently
           focused on building scalable solutions at DevNest.
         </p>
 
-        {/* CTA Buttons */}
+
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
           <a href="#skills" className="bg-gray-800 cursor-pointer text-white px-8 py-3 rounded-full text-sm font-normal hover:bg-gray-700 transition-all duration-300 flex items-center gap-2 group">
             View My Work
@@ -68,7 +68,7 @@ const Hero = () => {
           </button>
         </div>
 
-        {/* Social Links */}
+
         <div className="flex justify-center items-center gap-6">
           <a
             href={socialLinks.githubLink}
