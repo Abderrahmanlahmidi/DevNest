@@ -1,30 +1,17 @@
 import React from "react";
 import { FiGithub, FiExternalLink, FiCalendar, FiCode } from "react-icons/fi";
 import { getStatusColor } from "../../constants/projectsConstants";
-import { gql } from "@apollo/client";
-import { useQuery } from "@apollo/client/react";
 import { usePagination } from "../../components/usePagination.jsx";
+import { querySchemas } from '../../constants/graphQl/graphQlSchemas.jsx';
+import { useQueryQl } from '../../constants/graphQl/useGraphQl.jsx';
 
-const GET_PROJECTS = gql`
-  query {
-    allProjects {
-      _id
-      title
-      description
-      technologies
-      startDate
-      status
-      githubUrl
-      liveUrl
-      image
-    }
-  }
-`;
+
 
 const Projects = () => {
-  const { data, loading, error } = useQuery(GET_PROJECTS);
+  
+  const {data} = useQueryQl(querySchemas.getProjects)
 
-  const projects = data?.allProjects;
+  const projects = data?.allProjects || [];
   console.log("projects", projects);
 
   const { viewBar, current } = usePagination(projects, 3);
@@ -53,7 +40,7 @@ const Projects = () => {
               {/* Project Image */}
               <div className="h-40 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
-                  <FiCode className="text-3xl text-gray-400" />
+                  <img src={project.image}/>
                 </div>
                 <div className="absolute top-3 right-3">
                   <span
@@ -133,7 +120,7 @@ const Projects = () => {
             Interested in seeing more of my work?
           </p>
           <a
-            href="https://github.com/username"
+            href="https://github.com/Abderrahmanlahmidi"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 border border-gray-300 text-gray-600 px-6 py-2 rounded-full text-sm font-normal hover:border-gray-400 hover:text-gray-700 transition-all duration-300"

@@ -17,6 +17,7 @@ export const experienceTypeDefs = gql`
 
   type Query {
     getUserExperiences(userId: ID!): [Experience!]!
+    allExperiences:[Experience]
   }
 
   type Mutation {

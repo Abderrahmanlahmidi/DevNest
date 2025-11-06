@@ -3,6 +3,7 @@ import Dashboard from "../pages/dashboard";
 import Home from "../pages/home";
 import Login from "../pages/auth/login";
 import Contact from "../content/home/contact";
+import NotFound from "../pages/error/notFound";
 
 
 export const router = createBrowserRouter([
@@ -22,4 +23,8 @@ export const router = createBrowserRouter([
         path:"/contact", 
         element:<Contact/>
     },
+    {
+        path:"*",
+        element:<NotFound />
+    }
 ])

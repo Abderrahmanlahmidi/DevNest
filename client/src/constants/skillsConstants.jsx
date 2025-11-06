@@ -13,7 +13,8 @@ import {
   FiCode, 
   FiSmartphone, 
   FiServer, 
-  FiLayers 
+  FiLayers,
+  FiCloud
 } from 'react-icons/fi';
 
 
@@ -35,7 +36,7 @@ export const getIcon = (iconName) => {
     case "MongoDB":
       return <SiMongodb className={`${baseClasses} text-green-500`} />;
     case "AWS":
-      return <SiAmazoncloudwatch className={`${baseClasses} text-orange-500`} />;
+      return <FiCloud className={`${baseClasses} text-orange-500`} />;
     case "Git":
       return <SiGit className={`${baseClasses} text-orange-600`} />;
     case "Docker":

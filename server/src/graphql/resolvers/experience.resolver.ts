@@ -10,6 +10,9 @@ export const experienceResolvers = {
                 throw new Error("Failed to fetch experiences");
             }
         },
+        allExperiences: async () => {
+            return await Experience.find();
+        }
     },
 
     Mutation: {

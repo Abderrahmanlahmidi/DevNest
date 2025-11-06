@@ -1,36 +1,17 @@
-import { useState } from "react";
 import {
   getLevelColor,
   getCategoryColor,
   getIcon,
 } from "../../constants/skillsConstants";
-import { gql } from "@apollo/client";
-import { useQuery } from "@apollo/client/react";
-import { usePagination } from "../../components/usePagination";
-
-
-const GET_SKILLS = gql`
-  query {
-    allSkills {
-      _id
-      name
-      level
-      icon
-      category
-      description
-    }
-  }
-`;
+import { querySchemas } from "../../constants/graphQl/graphQlSchemas.jsx";
+import { useQueryQl } from "../../constants/graphQl/useGraphQl.jsx";
+import { usePagination } from "../../components/usePagination.jsx";
 
 const Skills = () => {
-  const { data } = useQuery(GET_SKILLS);
-
-  console.log("skills", data?.allSkills);
-
-  const skills = data?.allSkills;
-
-  const {viewBar, current} = usePagination(skills, 4)
-
+  
+  const { data } = useQueryQl(querySchemas.getSkills);
+  const skills = data?.allSkills || [];
+  const { viewBar, current } = usePagination(skills, 4);
 
   return (
     <section id="skills" className="py-20 bg-gray-50 px-4 sm:px-6 lg:px-8">
@@ -88,9 +69,7 @@ const Skills = () => {
           ))}
         </div>
         {/* Simple Pagination */}
-        <>
-         {viewBar}
-        </>
+        <>{viewBar}</>
       </div>
     </section>
   );
