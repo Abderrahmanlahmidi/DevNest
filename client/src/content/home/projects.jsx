@@ -19,7 +19,7 @@ const Projects = () => {
   return (
     <section className="py-20 bg-white px-4 sm:px-6 lg:px-8" id="projects">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-light text-gray-800 mb-4">
             Featured <span className="text-gray-600 font-normal">Projects</span>
@@ -30,14 +30,14 @@ const Projects = () => {
           </p>
         </div>
 
-        {/* Projects Grid - 3 cards per line */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {current.map((project, index) => (
             <div
               key={index}
               className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group flex flex-col h-full"
             >
-              {/* Project Image */}
+
               <div className="h-40 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
                   <img src={project.image}/>
@@ -53,9 +53,9 @@ const Projects = () => {
                 </div>
               </div>
 
-              {/* Project Content */}
+
               <div className="p-5 flex-1 flex flex-col">
-                {/* Title and Description */}
+
                 <h3 className="text-lg font-normal text-gray-800 mb-2 group-hover:text-gray-600 transition-colors line-clamp-1">
                   {project.title}
                 </h3>
@@ -63,7 +63,7 @@ const Projects = () => {
                   {project.description}
                 </p>
 
-                {/* Technologies */}
+
                 <div className="mb-4">
                   <div className="flex items-center gap-2 mb-1">
                     <FiCode className="text-gray-400 text-xs" />
@@ -76,7 +76,7 @@ const Projects = () => {
                   </p>
                 </div>
 
-                {/* Project Metadata */}
+
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-1 text-gray-400 text-xs">
                     <FiCalendar className="text-xs" />
@@ -84,7 +84,7 @@ const Projects = () => {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
+
                 <div className="flex items-center gap-3 pt-3 border-t border-gray-100">
                   <a
                     href={project.githubUrl}
@@ -114,7 +114,7 @@ const Projects = () => {
 
         <>{viewBar}</>
 
-        {/* Call to Action */}
+
         <div className="text-center mt-12">
           <p className="text-gray-500 mb-6 text-sm">
             Interested in seeing more of my work?

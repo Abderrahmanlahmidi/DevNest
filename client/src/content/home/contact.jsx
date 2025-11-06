@@ -40,7 +40,7 @@ const Contact = () => {
   return (
     <section className="py-20 bg-white px-4 sm:px-6 lg:px-8" id="contact">
       <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
+
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-light text-gray-800 mb-4">
             Get In <span className="text-gray-600 font-normal">Touch</span>
@@ -52,10 +52,10 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Contact Information */}
+
           <div className="lg:col-span-1">
             <div className="space-y-8">
-              {/* Contact Item 1 */}
+
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-gray-50 text-gray-600">
                   <FiMail className="text-xl" />
@@ -71,7 +71,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Contact Item 2 */}
+
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-gray-50 text-gray-600">
                   <FiPhone className="text-xl" />
@@ -87,7 +87,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Contact Item 3 */}
+
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-gray-50 text-gray-600">
                   <FiMapPin className="text-xl" />
@@ -103,7 +103,6 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Availability Status */}
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <motion.div
@@ -133,11 +132,11 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Form */}
+
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {/* Name Field */}
+
                 <div>
                   <label
                     htmlFor="name"
@@ -162,7 +161,6 @@ const Contact = () => {
                   </div>
                 </div>
 
-                {/* Email Field */}
                 <div>
                   <label
                     htmlFor="email"
@@ -188,7 +186,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Subject Field */}
+
               <div>
                 <label
                   htmlFor="subject"
@@ -208,7 +206,7 @@ const Contact = () => {
                 />
               </div>
 
-              {/* Message Field */}
+
               <div>
                 <label
                   htmlFor="message"
@@ -233,7 +231,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Submit Button */}
+
               <button
                 type="submit"
                 className="w-full bg-gray-800 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-all duration-300 flex items-center justify-center gap-2 group"
@@ -242,7 +240,7 @@ const Contact = () => {
                 Send Message
               </button>
 
-              {/* Privacy Note */}
+
               <p className="text-gray-400 text-xs text-center">
                 Your information is safe with us. We never share your details
                 with third parties.

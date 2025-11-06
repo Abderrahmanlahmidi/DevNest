@@ -18,7 +18,7 @@ const Competences = () => {
   return (
     <section className="py-20 bg-gray-50 px-4 sm:px-6 lg:px-8" id="competences">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-light text-gray-800 mb-4">
             Core <span className="text-gray-600 font-normal">Competences</span>
@@ -29,14 +29,14 @@ const Competences = () => {
           </p>
         </div>
 
-        {/* Competences Grid - 3 cards per line */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {current.map((competence, index) => (
             <div
               key={index}
               className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 group flex flex-col h-full"
             >
-              {/* Icon and Header */}
+
               <div className="flex items-start justify-between mb-4">
                 <div
                   className={`p-3 rounded-lg bg-gray-50 group-hover:bg-gray-100 transition-colors duration-300 ${getCategoryColor(
@@ -54,7 +54,7 @@ const Competences = () => {
                 </span>
               </div>
 
-              {/* Competence Name and Category */}
+
               <h3 className="text-lg font-normal text-gray-800 mb-2 group-hover:text-gray-600 transition-colors">
                 {competence.name}
               </h3>
@@ -66,14 +66,14 @@ const Competences = () => {
                 {competence.category}
               </p>
 
-              {/* Description */}
+
               <p className="text-gray-500 text-sm leading-relaxed mb-6 flex-1">
                 {competence.description}
               </p>
             </div>
           ))}
         </div>
-        {/* Simple Pagination */}
+
         <>{viewBar}</>
       </div>
     </section>

@@ -16,7 +16,7 @@ const Skills = () => {
   return (
     <section id="skills" className="py-20 bg-gray-50 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
+
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-light text-gray-800 mb-4">
             Skills &{" "}
@@ -28,14 +28,14 @@ const Skills = () => {
           </p>
         </div>
 
-        {/* Skills Grid */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {current.map((skill) => (
             <div
               key={skill._id}
               className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:border-gray-300 group"
             >
-              {/* Icon and Header */}
+
               <div className="flex items-start justify-between mb-4">
                 <div className="p-3 rounded-lg bg-gray-50 group-hover:bg-gray-100 transition-colors duration-300">
                   <div className="text-gray-600">{getIcon(skill.icon)}</div>
@@ -49,7 +49,7 @@ const Skills = () => {
                 </span>
               </div>
 
-              {/* Skill Name and Category */}
+
               <h3 className="text-lg font-normal text-gray-800 mb-2">
                 {skill.name}
               </h3>
@@ -61,14 +61,14 @@ const Skills = () => {
                 {skill.category}
               </p>
 
-              {/* Description */}
+
               <p className="text-gray-500 text-sm leading-relaxed">
                 {skill.description}
               </p>
             </div>
           ))}
         </div>
-        {/* Simple Pagination */}
+
         <>{viewBar}</>
       </div>
     </section>
