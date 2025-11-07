@@ -36,7 +36,7 @@ export const querySchemas = {
     }
   }
   `,
-  getExperiences:`
+  getExperiences: `
     query{
       allExperiences{
         title
@@ -49,11 +49,36 @@ export const querySchemas = {
       }
     }
   `,
+  userSkillsQuery: {
+    getUserSkills: `
+    query GetUserSkills($userId: ID!) {
+    userSkills(userId: $userId) {
+      _id   
+      name
+      level
+      category
+      description
+      icon
+    }
+  }
+    `,
+    getSkill:`
+  query GetSkill($id: ID!) {
+    skill(id: $id) {
+      _id
+      name
+      level
+      category
+      description
+      icon
+    }
+  }
+`
+  },
 };
 
-
 export const mutationSchemas = {
-    loginMutation: `
+  loginMutation: `
      mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
@@ -63,5 +88,27 @@ export const mutationSchemas = {
       }
     }
   }
-   `
-}
+   `,
+  SkillsMutation: {
+    deleteSkillMutation: `
+  mutation DeleteSkill($id: ID!) {
+    deleteSkill(id: $id) {
+    _id
+  }
+  }
+`,
+    updateSkillMutation:`
+  mutation UpdateSkill($id: ID!, $name: String, $level: String, $category: String, $description: String, $icon: String) {
+    updateSkill(id: $id, name: $name, level: $level, category: $category, description: $description, icon:$icon) {
+      _id
+      name
+      level
+      category
+      description
+      icon
+    }
+  }
+`,
+
+  },
+};

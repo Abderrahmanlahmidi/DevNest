@@ -1,10 +1,15 @@
-import React from 'react'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import {Sidebar} from "../content/admin/sidebar.jsx"
 
 export default function Dashboard() {
   return (
-    <div>
-        MY DASHBOARD
+    <div className="flex min-h-screen">
+      <Sidebar />
+
+      <div className="flex-1 bg-gray-50 p-6">
+        <Outlet />
+      </div>
     </div>
-  )
+  );
 }
-  

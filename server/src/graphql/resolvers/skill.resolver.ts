@@ -8,6 +8,11 @@ export const skillResolvers = {
     allSkills: async () => {
       return await Skill.find();
     },
+    skill: async (_: any, { id }: any) => {
+      const skill = await Skill.findById(id);
+      if (!skill) throw new Error("Skill not found");
+      return skill;
+    },
   },
 
   Mutation: {
@@ -62,7 +67,7 @@ export const skillResolvers = {
 
       try {
         await Skill.findByIdAndDelete(id);
-        return skill;
+        return skill.id;
       } catch (error) {
         console.error("Error deleting skill:", error);
         throw new Error("Failed to delete skill");

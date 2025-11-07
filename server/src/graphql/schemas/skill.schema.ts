@@ -16,6 +16,7 @@ export const skillTypeDefs = gql`
   extend type Query {
     userSkills(userId: ID!): [Skill!]!
     allSkills: [Skill]
+    skill(id: ID!): Skill
   }
 
   extend type Mutation {
