@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { motion,AnimatePresence } from "framer-motion";
 import {
   FiSearch,
   FiPlus,
@@ -18,6 +19,7 @@ import {
   useQueryQl,
   useOneElement,
   useUpdateMutationQl,
+  useCreateMutationQl
 } from "../../../constants/graphQl/useGraphQl.jsx";
 import {
   querySchemas,
@@ -40,6 +42,8 @@ const Skills = () => {
   } = useForm();
 
   const { data, refetch } = useQueryQl(querySchemas.getSkills);
+
+
   const { handleDelete } = useDeleteMutationQl(
     mutationSchemas.SkillsMutation.deleteSkillMutation
   );
@@ -51,14 +55,28 @@ const Skills = () => {
     }
   }, [data, searchTerm]);
 
-  const onSubmitCreate = (data) => {
+
+
+  //  !-Create
+  const {handleCreate} = useCreateMutationQl(mutationSchemas.SkillsMutation.createSkillMutation);
+
+
+  const onSubmitCreate = async (data) => {
     console.log("Create skill:", data);
+    await handleCreate({
+      name: data.name,
+      level: data.level,
+      category: data.category,
+      description: data.description,
+      icon: data.icon,
+      userId:JSON.parse(localStorage.getItem("userId"))
+    })
+    refetch();
     setShowCreateForm(false);
     reset();
   };
 
-
-
+  // !-Update
   const { elementData: skill } = useOneElement(
     querySchemas.userSkillsQuery.getSkill,
     {
@@ -69,11 +87,11 @@ const Skills = () => {
   useEffect(() => {
     if (skill) {
       reset({
-        name: skill.name || "",
-        level: skill.level || "",
-        category: skill.category || "",
-        description: skill.description || "",
-        icon: skill.icon || "",
+        nameUpdate: skill.name || "",
+        levelUpdate: skill.level || "",
+        categoryUpdate: skill.category || "",
+        descriptionUpdate: skill.description || "",
+        iconUpdate: skill.icon || "",
       });
     }
   }, [skill, reset]);
@@ -82,19 +100,20 @@ const Skills = () => {
     mutationSchemas.SkillsMutation.updateSkillMutation
   );
 
-  const onSubmitUpdate = (data) => {
+  const onSubmitUpdate = async (data) => {
     console.log("Update skill data:", data);
-    handleUpdate({
+    await handleUpdate({
       id: selectedSkillId,
-      name: data.name,
-      level: data.level,
-      category: data.category,
-      description: data.description,
-      icon:data.icon
+      name: data.nameUpdate,
+      level: data.levelUpdate,
+      category: data.categoryUpdate,
+      description: data.descriptionUpdate,
+      icon: data.iconUpdate,
     });
     setShowUpdateForm(false);
     reset();
   };
+
 
   return (
     <div className="p-6">
@@ -124,7 +143,7 @@ const Skills = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <div className="max-h-96 overflow-y-auto">
+          <div className="max-h-[470px] overflow-y-auto">
             <table className="w-full">
               <thead className="bg-gray-50 sticky top-0">
                 <tr>
@@ -151,7 +170,7 @@ const Skills = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {filteredData.length > 0 ? (
                   filteredData.map((skill) => (
-                    <tr key={skill.id} className="hover:bg-gray-50">
+                    <tr key={skill._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {skill.name}
                       </td>
@@ -210,185 +229,284 @@ const Skills = () => {
         </div>
       </div>
 
-      {showCreateForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-light text-gray-800">
-                Create New Skill
-              </h2>
-              <button
-                onClick={() => setShowCreateForm(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <FiX className="w-6 h-6" />
-              </button>
-            </div>
-            <form onSubmit={handleSubmit(onSubmitCreate)} className="space-y-4">
-              <div className="relative">
-                <FiType className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  {...register("name", { required: "Name is required" })}
-                  type="text"
-                  placeholder="Name"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
 
-              <div className="relative">
-                <FiBarChart2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  {...register("level")}
-                  type="text"
-                  placeholder="Level"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
-              </div>
-
-              <div className="relative">
-                <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  {...register("category")}
-                  type="text"
-                  placeholder="Category"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
-              </div>
-
-              <div className="relative">
-                <FiFileText className="absolute left-3 top-4 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <textarea
-                  {...register("description")}
-                  placeholder="Description"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  rows="3"
-                />
-              </div>
-
-              <div className="relative">
-                <FiCode className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  {...register("icon")}
-                  type="text"
-                  placeholder="Icon"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
-              </div>
-
-              <div className="flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateForm(false)}
-                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
-                >
-                  Create
-                </button>
-              </div>
-            </form>
-          </div>
+<AnimatePresence>
+  {showCreateForm && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+        transition={{ duration: 0.2 }}
+        className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-6"
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-light text-gray-800">
+            Create New Skill
+          </h2>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setShowCreateForm(false)}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <FiX className="w-6 h-6" />
+          </motion.button>
         </div>
-      )}
+        <form onSubmit={handleSubmit(onSubmitCreate)} className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="relative"
+          >
+            <FiType className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              {...register("name", { required: "Name is required" })}
+              type="text"
+              placeholder="Name"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.name.message}
+              </p>
+            )}
+          </motion.div>
 
-      {showUpdateForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-light text-gray-800">
-                Update Skill
-              </h2>
-              <button
-                onClick={() => setShowUpdateForm(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <FiX className="w-6 h-6" />
-              </button>
-            </div>
-            <form onSubmit={handleSubmit(onSubmitUpdate)} className="space-y-4">
-              <div className="relative">
-                <FiType className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  {...register("name", { required: "Name is required" })}
-                  type="text"
-                  placeholder="Name"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
-                {errors.name && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.15 }}
+            className="relative"
+          >
+            <FiBarChart2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              {...register("level")}
+              type="text"
+              placeholder="Level"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+            />
+          </motion.div>
 
-              <div className="relative">
-                <FiBarChart2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  {...register("level")}
-                  type="text"
-                  placeholder="Level"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
-              </div>
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="relative"
+          >
+            <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              {...register("category")}
+              type="text"
+              placeholder="Category"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+            />
+          </motion.div>
 
-              <div className="relative">
-                <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  {...register("category")}
-                  type="text"
-                  placeholder="Category"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
-              </div>
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.25 }}
+            className="relative"
+          >
+            <FiFileText className="absolute left-3 top-4 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <textarea
+              {...register("description")}
+              placeholder="Description"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              rows="3"
+            />
+          </motion.div>
 
-              <div className="relative">
-                <FiFileText className="absolute left-3 top-4 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <textarea
-                  {...register("description")}
-                  placeholder="Description"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                  rows="3"
-                />
-              </div>
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="relative"
+          >
+            <FiCode className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              {...register("icon")}
+              type="text"
+              placeholder="Icon"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+            />
+          </motion.div>
 
-              <div className="relative">
-                <FiCode className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  {...register("icon")}
-                  type="text"
-                  placeholder="Icon"
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                />
-              </div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="flex justify-end gap-3 pt-4"
+          >
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+              onClick={() => setShowCreateForm(false)}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            >
+              Cancel
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+            >
+              Create
+            </motion.button>
+          </motion.div>
+        </form>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
 
-              <div className="flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setShowUpdateForm(false)}
-                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
-                >
-                  Update
-                </button>
-              </div>
-            </form>
-          </div>
+<AnimatePresence>
+  {showUpdateForm && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+        transition={{ duration: 0.2 }}
+        className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-6"
+      >
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-light text-gray-800">
+            Update Skill
+          </h2>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setShowUpdateForm(false)}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <FiX className="w-6 h-6" />
+          </motion.button>
         </div>
-      )}
+        <form onSubmit={handleSubmit(onSubmitUpdate)} className="space-y-4">
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="relative"
+          >
+            <FiType className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              {...register("nameUpdate", { required: "Name is required" })}
+              type="text"
+              placeholder="Name"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.name.message}
+              </p>
+            )}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.15 }}
+            className="relative"
+          >
+            <FiBarChart2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              {...register("levelUpdate")}
+              type="text"
+              placeholder="Level"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="relative"
+          >
+            <FiLayers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              {...register("categoryUpdate")}
+              type="text"
+              placeholder="Category"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.25 }}
+            className="relative"
+          >
+            <FiFileText className="absolute left-3 top-4 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <textarea
+              {...register("descriptionUpdate")}
+              placeholder="Description"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+              rows="3"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="relative"
+          >
+            <FiCode className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              {...register("iconUpdate")}
+              type="text"
+              placeholder="Icon"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="flex justify-end gap-3 pt-4"
+          >
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+              onClick={() => setShowUpdateForm(false)}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+            >
+              Cancel
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700"
+            >
+              Update
+            </motion.button>
+          </motion.div>
+        </form>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
     </div>
   );
 };

@@ -12,7 +12,12 @@ export const experienceResolvers = {
         },
         allExperiences: async () => {
             return await Experience.find();
-        }
+        },
+        experience: async (_: any, { id }: any) => {
+          const experience = await Experience.findById(id);
+          if (!experience) throw new Error("experience not found");
+          return experience;
+        },
     },
 
     Mutation: {

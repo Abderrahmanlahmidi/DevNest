@@ -1,106 +1,163 @@
 import { gql } from "@apollo/client";
 import { useQuery, useMutation } from "@apollo/client/react";
+import { useToast } from "../../components/toast";
 
-
-
-// Queries
+// !- Queries
 export const useQueryQl = (query) => {
+  const { toast } = useToast();
+  const gqlQuery = gql`
+    ${query}
+  `;
+  const { data, error, loading, refetch } = useQuery(gqlQuery);
 
-    const gqlQuery = gql`${query}`;
-    const {data, error, loading, refetch} = useQuery(gqlQuery)
+  // Show error toast if query fails
+  if (error && !loading) {
+    toast.error("Failed to fetch data. Please try again.");
+  }
 
-    return {data, error, loading, refetch}
-}
+  return { data, error, loading, refetch };
+};
 
 export const useUserQueryQl = (query, userId) => {
-    const gqlQuery = gql`${query}`;
+  const { toast } = useToast();
+  const gqlQuery = gql`
+    ${query}
+  `;
 
-    const {data, error, loading, refetch} = useQuery(gqlQuery, {
-        variables: {userId},
-    });
+  const { data, error, loading } = useQuery(gqlQuery, {
+    variables: { userId },
+  });
 
-    return {data, error, loading, refetch};
+  // Show error toast if query fails
+  if (error && !loading) {
+    toast.error("Failed to load user data.");
+  }
+
+  return { data, error, loading };
 };
 
 export const useOneElement = (query, variables) => {
-  const gqlQuery = gql`${query}`;
+  const { toast } = useToast();
+  const gqlQuery = gql`
+    ${query}
+  `;
 
-
-  const { data, loading, error, refetch } = useQuery(gqlQuery, {
+  const { data, loading, error } = useQuery(gqlQuery, {
     variables,
-    skip: !variables,
+    skip: !variables?.id,
   });
 
+  // Show error toast if query fails
+  if (error && !loading) {
+    toast.error("Failed to load item details.");
+  }
+
   const key = data ? Object.keys(data)[0] : null;
-  return { elementData: key ? data[key] : null, loading, error, refetch };
+  return { elementData: key ? data[key] : null, loading, error };
 };
 
-// Mutations
+// !- Mutations
 export const useMutationQl = (mutation) => {
-    const gqlMutation = gql`${mutation}`;
+  const { toast } = useToast();
+  const gqlMutation = gql`
+    ${mutation}
+  `;
 
-    const [mutate, { loading, error }] = useMutation(gqlMutation);
+  const [mutate, { loading, error }] = useMutation(gqlMutation);
 
-    return {mutate, loading, error};
-}
+  // Show error toast if mutation setup fails
+  if (error) {
+    toast.error("Mutation setup failed.");
+  }
 
-
-// Delete Mutation
-export const useDeleteMutationQl = (mutation, variableName = "id") => {
-    const gqlMutation = gql`${mutation}`;
-
-    const [deleteMutation, { loading, error }] = useMutation(gqlMutation);
-
-    const handleDelete = async (id) => {
-        try {
-            const { data } = await deleteMutation({
-                variables: { [variableName]: id },
-            });
-
-            if (data) {
-                console.log("Deleted successfully:", data);
-            } else {
-                console.log("Not found or already deleted.");
-            }
-        } catch (e) {
-            console.error("Error during delete:", e);
-        }
-    };
-
-    return { handleDelete, loading, error };
+  return { mutate, loading, error };
 };
 
-// Update Mutation
+// !- Delete Mutation
+export const useDeleteMutationQl = (mutation, variableName = "id") => {
+  const { toast } = useToast();
+  const gqlMutation = gql`
+    ${mutation}
+  `;
+
+  const [deleteMutation, { loading, error }] = useMutation(gqlMutation);
+
+  const handleDelete = async (id) => {
+    try {
+      const { data } = await deleteMutation({
+        variables: { [variableName]: id },
+      });
+
+      if (data) {
+        toast.success("Item deleted successfully!");
+        return data;
+      } else {
+        toast.warning("Item not found or already deleted.");
+        return null;
+      }
+    } catch (e) {
+      toast.error(`Delete failed: ${e.message}`);
+      throw e;
+    }
+  };
+
+  return { handleDelete, loading, error };
+};
+
+// !- Update Mutation
 export const useUpdateMutationQl = (mutation) => {
-  const gqlMutation = gql`${mutation}`;
+  const { toast } = useToast();
+  const gqlMutation = gql`
+    ${mutation}
+  `;
 
   const [updateMutation, { loading, error }] = useMutation(gqlMutation);
 
-
   const handleUpdate = async (variables) => {
-      console.log("Variables sent:", variables);
     try {
       const { data } = await updateMutation({ variables });
 
       if (data) {
-        console.log("Updated successfully:", data);
+        toast.success("Item updated successfully!");
         return data;
       } else {
-        console.log("No data returned from update.");
+        toast.warning("No data returned from update.");
         return null;
       }
     } catch (e) {
-      console.error("Error during update:", e);
+      toast.error(`Update failed: ${e.message}`);
       throw e;
     }
   };
 
   return { handleUpdate, loading, error };
-
 };
 
+// !- Create Mutation
+export const useCreateMutationQl = (mutation) => {
+  const { toast } = useToast();
+  const gqlMutation = gql`
+    ${mutation}
+  `;
 
+  const [createMutation, { loading, error }] = useMutation(gqlMutation);
 
+  const handleCreate = async (variables) => {
+    try {
+      const response = await createMutation({ variables });
 
+      if (response?.data) {
+        toast.success("Item created successfully!");
+        return response.data;
+      }
 
+      toast.warning("No data returned from create operation.");
+      return null;
+    } catch (error) {
+      toast.error(`Create failed: ${error.message || "Unknown error"}`);
+      return null;
+    }
+  };
 
+  return { handleCreate, loading, error };
+};

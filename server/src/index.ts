@@ -15,10 +15,11 @@ import { connectDB } from "./config/db.ts";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 dotenv.config();
-
-
 
 async function startServer() {
   const app = express();
@@ -31,6 +32,7 @@ async function startServer() {
     })
   );
 
+
   app.post("/logout", (req, res) => {
     res.clearCookie("token", {
       httpOnly: true,
@@ -39,6 +41,34 @@ async function startServer() {
     });
     res.json({ message: "Logged out" });
   });
+
+
+const uploadDir = path.resolve("uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadDir),
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + "-" + file.originalname;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
+
+app.post("/upload", upload.single("image"), (req, res) => {
+  if (!req.file) {
+    console.log("No file uploaded");
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+  console.log(req.file)
+  const imageUrl = `/uploads/${req.file.filename}`;
+  console.log("File saved at:", imageUrl);
+  res.json({ imageUrl });
+});
+
+app.use("/uploads", express.static(uploadDir));
+
 
   const baseTypeDefs = gql`
     type Query {
@@ -67,10 +97,8 @@ async function startServer() {
       competenceResolvers,
     ],
     context: ({ req, res }) => {
-
       const token = req.cookies.token;
       const user = getUserFromToken(token);
-
       return { user, res };
     },
   });
@@ -79,11 +107,13 @@ async function startServer() {
   server.applyMiddleware({ app, cors: false });
   await connectDB();
 
-  const PORT = process.env.PORT;
+  const PORT = process.env.PORT || 4000;
 
-  app.listen(PORT, () =>
-    console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
-  );
+  app.listen(PORT, () => {
+    console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+    console.log(`Upload endpoint at http://localhost:${PORT}/upload`);
+    console.log(` Static files served from /uploads`);
+  });
 }
 
 startServer();

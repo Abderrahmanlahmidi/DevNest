@@ -13,45 +13,56 @@ export const Sidebar = () => {
     ];
 
     return (
-        <div className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col">
-            <div className="p-6 border-b border-gray-200">
-                <h1 className="text-2xl font-light text-gray-800">
-                    <span className="text-gray-600">Dev</span>Nest
+        <div className="w-64 bg-white border-r border-gray-100 min-h-screen flex flex-col transition-all duration-300">
+
+            <div className="p-6 border-b border-gray-100 transition-colors duration-300">
+                <h1 className="text-2xl font-light text-gray-800 transition-colors duration-300">
+                    <span className="font-normal text-gray-600 transition-colors duration-300">Dev</span>Nest
                 </h1>
             </div>
 
-            <nav className="p-4 space-y-2 flex-1">
-                {menuItems.map((item) => (
-                    <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 ${
-                            location.pathname === item.path
-                                ? 'bg-gray-100 text-gray-900'
-                                : 'text-gray-700 hover:bg-gray-100'
-                        }`}
-                    >
-                        <item.icon className="w-5 h-5" />
-                        <span className="font-medium">{item.label}</span>
-                    </Link>
-                ))}
+            <nav className="p-4 space-y-1 flex-1">
+                {menuItems.map((item) => {
+                    const isActive = location.pathname === item.path;
+                    return (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-[1.02] ${
+                                isActive
+                                    ? 'bg-gray-800 text-white border border-gray-800 shadow-md scale-[1.02]'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm hover:border hover:border-gray-200'
+                            }`}
+                        >
+                            <item.icon className={`w-5 h-5 transition-colors duration-300 ${
+                                isActive ? 'text-white' : 'text-gray-400 hover:text-gray-600'
+                            }`} />
+                            <span className="font-medium transition-colors duration-300">{item.label}</span>
+                            
+                            {/* Active indicator */}
+                            {isActive && (
+                                <div className="ml-auto w-2 h-2 bg-white rounded-full transition-all duration-300" />
+                            )}
+                        </Link>
+                    );
+                })}
             </nav>
 
-            <div className="p-4 border-t border-gray-200 space-y-2">
+            <div className="p-4 border-t border-gray-100 space-y-2 transition-colors duration-300">
                 <Link
                     to="/"
-                    className="flex items-center gap-3 px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                    className="flex items-center gap-3 px-4 py-3 text-gray-600 rounded-lg hover:bg-gray-50 transition-all duration-300 ease-in-out transform hover:scale-[1.02] group"
                 >
-                    <FiArrowLeft className="w-5 h-5" />
-                    <span className="font-medium">Back to Home</span>
+                    <FiArrowLeft className="w-5 h-5 text-gray-400 transition-all duration-300 group-hover:text-gray-600 group-hover:-translate-x-1" />
+                    <span className="font-medium transition-colors duration-300">Back to Home</span>
                 </Link>
 
                 <Link
                     to="/logout"
-                    className="flex items-center gap-3 px-4 py-3 text-red-600 rounded-lg hover:bg-red-50 transition-colors duration-200"
+                    className="flex items-center gap-3 px-4 py-3 text-red-600 rounded-lg hover:bg-red-50 transition-all duration-300 ease-in-out transform hover:scale-[1.02] group"
                 >
-                    <FiLogOut className="w-5 h-5" />
-                    <span className="font-medium">Logout</span>
+                    <FiLogOut className="w-5 h-5 transition-all duration-300 group-hover:scale-110" />
+                    <span className="font-medium transition-colors duration-300">Logout</span>
                 </Link>
             </div>
         </div>

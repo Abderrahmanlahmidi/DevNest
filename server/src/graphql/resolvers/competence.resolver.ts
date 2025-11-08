@@ -13,6 +13,11 @@ export const competenceResolvers = {
     allCompetences: async () => {
       return await Competence.find();
     },
+    competence: async (_: any, { id }: any) => {
+      const competence = await Competence.findById(id);
+      if (!competence) throw new Error("Competence not found");
+      return competence;
+    },
   },
 
   Mutation: {
@@ -38,7 +43,7 @@ export const competenceResolvers = {
     },
 
     updateCompetence: async (_: any, args: any) => {
-      const { id, name, level, category, description } = args;
+      const { id, name, level, category, description , userId} = args;
 
       if (!id) throw new Error("Competence ID is required");
 
@@ -50,6 +55,7 @@ export const competenceResolvers = {
         if (level !== undefined) competence.level = level;
         if (category !== undefined) competence.category = category;
         if (description !== undefined) competence.description = description;
+
 
         await competence.save();
         return competence;
