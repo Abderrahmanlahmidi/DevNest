@@ -13,7 +13,7 @@ const ME_QUERY = gql`
 `;
 
 export function PrivateRoute({ children }) {
-    const { data, loading, error } = useQuery(ME_QUERY, {
+    const { data, loading } = useQuery(ME_QUERY, {
         fetchPolicy: "network-only",
     });
 

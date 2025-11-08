@@ -4,6 +4,7 @@ import { getStatusColor } from "../../constants/projectsConstants";
 import { usePagination } from "../../components/usePagination.jsx";
 import { querySchemas } from '../../constants/graphQl/graphQlSchemas.jsx';
 import { useQueryQl } from '../../constants/graphQl/useGraphQl.jsx';
+import { handleDate } from "../../constants/handleDate.jsx";
 
 
 
@@ -40,7 +41,7 @@ const Projects = () => {
 
               <div className="h-40 bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
-                  <img src={project.image}/>
+                  <img  src={`http://localhost:4000${project.image}`}/>
                 </div>
                 <div className="absolute top-3 right-3">
                   <span
@@ -80,7 +81,7 @@ const Projects = () => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-1 text-gray-400 text-xs">
                     <FiCalendar className="text-xs" />
-                    <span>Started {project.startDate}</span>
+                    <span>Started {handleDate(project.startDate)}</span>
                   </div>
                 </div>
 

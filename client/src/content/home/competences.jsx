@@ -9,7 +9,7 @@ import { useQueryQl } from "../../constants/graphQl/useGraphQl.jsx";
 import { usePagination } from "../../components/usePagination.jsx";
 
 const Competences = () => {
-  const { data, error, loading } = useQueryQl(querySchemas.getCompetences);
+  const {data} = useQueryQl(querySchemas.getCompetences);
 
   const competences = data?.allCompetences || [];
 
