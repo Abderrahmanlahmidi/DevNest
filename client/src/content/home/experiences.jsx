@@ -4,6 +4,7 @@ import {getTypeColor, formatDate} from "../../constants/experiencesConstants.jsx
 import { querySchemas } from "../../constants/graphQl/graphQlSchemas.jsx";
 import { useQueryQl } from "../../constants/graphQl/useGraphQl.jsx";
 import { downloadDocument } from "../../constants/downloadDocument";
+import { handleDate } from '../../constants/handleDate.jsx';
 
 
 
@@ -48,7 +49,7 @@ const Experiences = () => {
 
                                 <div className="md:w-1/2 md:pr-12 md:text-right mb-4 md:mb-0 ml-12 md:ml-0">
                                     <div className="text-gray-500 text-sm font-medium mb-1">
-                                        {formatDate(experience.startDate)} - {formatDate(experience.endDate)}
+                                        {handleDate(experience.startDate)} - {handleDate(experience.endDate)}
                                     </div>
                                 </div>
 

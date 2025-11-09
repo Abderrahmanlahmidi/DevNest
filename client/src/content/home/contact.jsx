@@ -1,46 +1,49 @@
-import React, { useState } from "react";
-import {
-  FiMail,
-  FiPhone,
-  FiMapPin,
-  FiSend,
-  FiUser,
-  FiMessageSquare,
-} from "react-icons/fi";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { FiMail, FiPhone, FiMapPin } from "react-icons/fi";
 import { motion } from "framer-motion";
+import { useToast } from "../../components/toast";
+import { socialLinks } from "../../constants/socialMedia";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
+  const { toast } = useToast();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+  const onSubmit = async (data) => {
+    console.log("Form submitted:", data);
+
+    try {
+      const res = await fetch("http://localhost:4000/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        toast.success(result.message || "Message sent successfully!");
+        reset();
+      } else {
+        toast.error(result.error || "Failed to send message.");
+      }
+    } catch (error) {
+      console.error("Error sending contact message:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
     <section className="py-20 bg-white px-4 sm:px-6 lg:px-8" id="contact">
       <div className="max-w-6xl mx-auto">
-
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-light text-gray-800 mb-4">
             Get In <span className="text-gray-600 font-normal">Touch</span>
@@ -52,10 +55,8 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-
           <div className="lg:col-span-1">
             <div className="space-y-8">
-
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-gray-50 text-gray-600">
                   <FiMail className="text-xl" />
@@ -63,14 +64,13 @@ const Contact = () => {
                 <div>
                   <h3 className="text-gray-800 font-medium mb-1">Email</h3>
                   <p className="text-gray-500 text-sm mb-1">
-                    hello@devnest.com
+                    {socialLinks.gmail}
                   </p>
                   <p className="text-gray-400 text-xs">
                     Typically replies within 24 hours
                   </p>
                 </div>
               </div>
-
 
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-gray-50 text-gray-600">
@@ -79,14 +79,13 @@ const Contact = () => {
                 <div>
                   <h3 className="text-gray-800 font-medium mb-1">Phone</h3>
                   <p className="text-gray-500 text-sm mb-1">
-                    +1 (555) 123-4567
+                    {socialLinks.numberPhone}
                   </p>
                   <p className="text-gray-400 text-xs">
                     Mon-Fri from 9am to 6pm
                   </p>
                 </div>
               </div>
-
 
               <div className="flex items-start gap-4">
                 <div className="p-3 rounded-lg bg-gray-50 text-gray-600">
@@ -95,7 +94,7 @@ const Contact = () => {
                 <div>
                   <h3 className="text-gray-800 font-medium mb-1">Location</h3>
                   <p className="text-gray-500 text-sm mb-1">
-                    San Francisco, CA
+                    {socialLinks.address}
                   </p>
                   <p className="text-gray-400 text-xs">
                     Available for remote work worldwide
@@ -132,11 +131,9 @@ const Contact = () => {
             </div>
           </div>
 
-
           <div className="lg:col-span-2">
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
                 <div>
                   <label
                     htmlFor="name"
@@ -144,20 +141,27 @@ const Contact = () => {
                   >
                     Full Name
                   </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FiUser className="text-gray-400" />
-                    </div>
+                  <div>
                     <input
                       type="text"
                       id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300"
+                      {...register("name", {
+                        required: "Name is required",
+                        minLength: {
+                          value: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                      })}
+                      className={`block w-full px-3 py-3 border rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300 ${
+                        errors.name ? "border-red-300" : "border-gray-300"
+                      }`}
                       placeholder="Your full name"
-                      required
                     />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -168,24 +172,30 @@ const Contact = () => {
                   >
                     Email Address
                   </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <FiMail className="text-gray-400" />
-                    </div>
+                  <div>
                     <input
                       type="email"
                       id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300"
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Invalid email address",
+                        },
+                      })}
+                      className={`block w-full px-3 py-3 border rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300 ${
+                        errors.email ? "border-red-300" : "border-gray-300"
+                      }`}
                       placeholder="your.email@example.com"
-                      required
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
-
 
               <div>
                 <label
@@ -197,15 +207,24 @@ const Contact = () => {
                 <input
                   type="text"
                   id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  className="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300"
+                  {...register("subject", {
+                    required: "Subject is required",
+                    minLength: {
+                      value: 3,
+                      message: "Subject must be at least 3 characters",
+                    },
+                  })}
+                  className={`block w-full px-3 py-3 border rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300 ${
+                    errors.subject ? "border-red-300" : "border-gray-300"
+                  }`}
                   placeholder="What's this about?"
-                  required
                 />
+                {errors.subject && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.subject.message}
+                  </p>
+                )}
               </div>
-
 
               <div>
                 <label
@@ -214,32 +233,36 @@ const Contact = () => {
                 >
                   Message
                 </label>
-                <div className="relative">
-                  <div className="absolute top-3 left-3 pointer-events-none">
-                    <FiMessageSquare className="text-gray-400" />
-                  </div>
+                <div>
                   <textarea
                     id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
+                    {...register("message", {
+                      required: "Message is required",
+                      minLength: {
+                        value: 10,
+                        message: "Message must be at least 10 characters",
+                      },
+                    })}
                     rows="6"
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300 resize-none"
+                    className={`block w-full px-3 py-3 border rounded-lg focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-300 resize-none ${
+                      errors.message ? "border-red-300" : "border-gray-300"
+                    }`}
                     placeholder="Tell me about your project, timeline, and budget..."
-                    required
                   ></textarea>
+                  {errors.message && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
-
               <button
                 type="submit"
-                className="w-full bg-gray-800 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-all duration-300 flex items-center justify-center gap-2 group"
+                className="w-full bg-gray-800 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-all duration-300 flex items-center justify-center"
               >
-                <FiSend className="group-hover:translate-x-1 transition-transform" />
                 Send Message
               </button>
-
 
               <p className="text-gray-400 text-xs text-center">
                 Your information is safe with us. We never share your details
