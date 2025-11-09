@@ -40,7 +40,7 @@ jobs:
       # ---------------- Frontend ----------------
       - name: Install frontend dependencies
         working-directory: ./client
-        run: npm ci
+        run: npm ci --omit=none
 
       - name: Build frontend
         working-directory: ./client
