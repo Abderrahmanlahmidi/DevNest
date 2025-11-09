@@ -14,32 +14,32 @@ const ToastMessage = ({ message, type = 'info', onDismiss }) => {
     const getToastStyles = () => {
         const baseClasses = "flex items-center p-4 mb-4 rounded-lg shadow-lg border";
 
-        switch(type) {
-            case 'error':
-                return {
-                    className: `${baseClasses} text-gray-800 bg-white border-gray-300`,
-                    icon: <FiAlertCircle className="shrink-0 w-5 h-5 text-gray-600" />,
-                    buttonClass: "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                };
-            case 'success':
-                return {
-                    className: `${baseClasses} text-gray-800 bg-white border-gray-300`,
-                    icon: <FiCheckCircle className="shrink-0 w-5 h-5 text-gray-600" />,
-                    buttonClass: "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                };
-            case 'warning':
-                return {
-                    className: `${baseClasses} text-gray-800 bg-white border-gray-300`,
-                    icon: <FiAlertTriangle className="shrink-0 w-5 h-5 text-gray-600" />,
-                    buttonClass: "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                };
-            default: 
-                return {
-                    className: `${baseClasses} text-gray-800 bg-white border-gray-300`,
-                    icon: <FiInfo className="shrink-0 w-5 h-5 text-gray-600" />,
-                    buttonClass: "bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-                };
-        }
+     switch(type) {
+    case 'error':
+        return {
+            className: `${baseClasses} text-red-800 bg-red-50 border-red-200`,
+            icon: <FiAlertCircle className="shrink-0 w-5 h-5 text-red-600" />,
+            buttonClass: "bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-800"
+        };
+    case 'success':
+        return {
+            className: `${baseClasses} text-green-800 bg-green-50 border-green-200`,
+            icon: <FiCheckCircle className="shrink-0 w-5 h-5 text-green-600" />,
+            buttonClass: "bg-green-50 text-green-600 hover:bg-green-100 hover:text-green-800"
+        };
+    case 'warning':
+        return {
+            className: `${baseClasses} text-yellow-800 bg-yellow-50 border-yellow-200`,
+            icon: <FiAlertTriangle className="shrink-0 w-5 h-5 text-yellow-600" />,
+            buttonClass: "bg-yellow-50 text-yellow-600 hover:bg-yellow-100 hover:text-yellow-800"
+        };
+    default: 
+        return {
+            className: `${baseClasses} text-blue-800 bg-blue-50 border-blue-200`,
+            icon: <FiInfo className="shrink-0 w-5 h-5 text-blue-600" />,
+            buttonClass: "bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800"
+        };
+}
     };
 
     const styles = getToastStyles();

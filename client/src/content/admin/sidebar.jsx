@@ -56,14 +56,6 @@ export const Sidebar = () => {
                     <FiArrowLeft className="w-5 h-5 text-gray-400 transition-all duration-300 group-hover:text-gray-600 group-hover:-translate-x-1" />
                     <span className="font-medium transition-colors duration-300">Back to Home</span>
                 </Link>
-
-                <Link
-                    to="/logout"
-                    className="flex items-center gap-3 px-4 py-3 text-red-600 rounded-lg hover:bg-red-50 transition-all duration-300 ease-in-out transform hover:scale-[1.02] group"
-                >
-                    <FiLogOut className="w-5 h-5 transition-all duration-300 group-hover:scale-110" />
-                    <span className="font-medium transition-colors duration-300">Logout</span>
-                </Link>
             </div>
         </div>
     );

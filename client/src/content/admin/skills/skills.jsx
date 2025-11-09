@@ -50,7 +50,7 @@ const Skills = () => {
 
   useEffect(() => {
     if (data?.allSkills) {
-      const filteredSkills = HandleSearch(data.allSkills, searchTerm);
+      const filteredSkills = HandleSearch(data?.allSkills, searchTerm);
       setFilteredData(filteredSkills);
     }
   }, [data, searchTerm]);
@@ -199,8 +199,9 @@ const Skills = () => {
                           </button>
                           <button
                             onClick={async () => {
+                              console.log(skill._id)
                               await handleDelete(skill._id);
-                              refetch();
+                              await refetch();
                             }}
                             className="text-red-600 hover:text-red-900 p-2"
                           >

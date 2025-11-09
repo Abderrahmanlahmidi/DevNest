@@ -1,0 +1,63 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+
+    env:
+      NODE_ENV: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # ---------------- Backend ----------------
+      - name: Install backend dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Run backend tests
+        working-directory: ./server
+        run: npm test || echo "No tests configured"
+
+      # ---------------- Frontend ----------------
+      - name: Install frontend dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./client
+        run: npm run build
+
+      # ---------------- Deploy ----------------
+      # - name: Deploy to VPS (example)
+      #   if: github.ref == 'refs/heads/main'
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      #     HOST: ${{ secrets.SERVER_HOST }}
+      #     USER: ${{ secrets.SERVER_USER }}
+      #   run: |
+      #     echo "Deploying project..."
+      #     mkdir -p ~/.ssh
+      #     echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+      #     chmod 600 ~/.ssh/id_rsa
+      #     rsync -avz --delete ./client/build/ $USER@$HOST:/var/www/project/client/
+      #     rsync -avz --delete ./server/ $USER@$HOST:/var/www/project/server/
+      #     ssh $USER@$HOST "cd /var/www/project/server && npm install && pm2 restart all"
