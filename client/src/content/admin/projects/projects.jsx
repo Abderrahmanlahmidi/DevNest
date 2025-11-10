@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion,AnimatePresence } from "framer-motion";
+
 import {
   FiSearch,
   FiPlus,
@@ -28,7 +29,7 @@ import {
   querySchemas,
 } from "../../../constants/graphQl/graphQlSchemas";
 import { HandleSearch } from "../../../constants/handleSearch";
-import { handleDate } from "../../../constants/handleDate";
+import { convertTimestampToInputDate, handleDate } from "../../../constants/handleDate";
 import { getStatusColor } from "../../../constants/projectsConstants";
 
 const Projects = () => {
@@ -58,28 +59,7 @@ const Projects = () => {
     }
   }, [data, searchTerm]);
 
-  // !- Get single project for update
-  const { elementData: project } = useOneElement(
-    querySchemas.project,
-    selectProjectId ? { id: selectProjectId } : null
-  );
 
-  useEffect(() => {
-    if (project) {
-      reset({
-        titleUpdate: project.title,
-        descriptionUpdate: project.description,
-        technologiesUpdate: project.technologies,
-        startDateUpdate: project.startDate ? project.startDate.substring(0, 7) : "",
-        statusUpdate: project.status,
-        githubUrlUpdate: project.githubUrl,
-        liveUrlUpdate: project.liveUrl,
-      });
-      if (project.image) {
-        setUpdateImage(`http://localhost:4000${project.image}`);
-      }
-    }
-  }, [project, reset]);
 
   const handleImageUpload = (event, type) => {
     const file = event.target.files[0];
@@ -131,7 +111,7 @@ const Projects = () => {
         title: data.title,
         description: data.description,
         technologies: data.technologies,
-        startDate: data.startDate ? `${data.startDate}-01` : null,
+        startDate: data.startDate,
         status: data.status,
         githubUrl: data.githubUrl,
         liveUrl: data.liveUrl,
@@ -147,6 +127,36 @@ const Projects = () => {
       console.error("Create failed:", error);
     }
   };
+
+
+// !- Get single project for update
+const { elementData: project } = useOneElement(
+  querySchemas.project,
+  selectProjectId ? { id: selectProjectId } : null
+);
+
+
+
+  useEffect(() => {
+
+    console.log(project)
+    if (project) {
+      reset({
+        titleUpdate: project.title,
+        descriptionUpdate: project.description,
+        technologiesUpdate: project.technologies,
+        startDateUpdate:convertTimestampToInputDate(project.startDate),
+        statusUpdate: project.status,
+        githubUrlUpdate: project.githubUrl,
+        liveUrlUpdate: project.liveUrl,
+      });
+      if (project.image) {
+        setUpdateImage(`http://localhost:4000${project.image}`);
+      }
+    }
+
+    
+  }, [project, reset]);
 
   const { handleUpdate } = useUpdateMutationQl(
     mutationSchemas.ProjectMutation.updateProjectMutation
@@ -174,7 +184,7 @@ const Projects = () => {
         title: data.titleUpdate,
         description: data.descriptionUpdate,
         technologies: data.technologiesUpdate,
-        startDate: data.startDateUpdate ? `${data.startDateUpdate}-01` : null,
+        startDate: data.startDateUpdate,
         status: data.statusUpdate,
         githubUrl: data.githubUrlUpdate,
         liveUrl: data.liveUrlUpdate,
@@ -467,7 +477,7 @@ const Projects = () => {
                 <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   {...register("startDate")}
-                  type="month"
+                  type="date"
                   placeholder="Start Date"
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                 />
@@ -655,9 +665,7 @@ const Projects = () => {
             >
               <FiType className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
-                {...register("titleUpdate", {
-                  required: "Title is required",
-                })}
+                {...register("titleUpdate")}
                 type="text"
                 placeholder="Project Title"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
@@ -709,7 +717,7 @@ const Projects = () => {
                 <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   {...register("startDateUpdate")}
-                  type="month"
+                  type="date"
                   placeholder="Start Date"
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                 />
