@@ -25,7 +25,7 @@ import {
   mutationSchemas,
 } from "../../../constants/graphQl/graphQlSchemas";
 import { HandleSearch } from "../../../constants/handleSearch";
-import { handleDate } from "../../../constants/handleDate";
+import { convertTimestampToInputDate, handleDate } from "../../../constants/handleDate";
 
 const Experiences = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -70,8 +70,8 @@ const Experiences = () => {
       reset({
         titleUpdate: experience.title,
         companyUpdate: experience.company,
-        startDateUpdate: experience.startDate,
-        endDateUpdate: experience.endDate,
+        startDateUpdate:convertTimestampToInputDate(experience.startDate) ,
+        endDateUpdate:convertTimestampToInputDate(experience.endDate),
         descriptionUpdate: experience.description,
         locationUpdate: experience.location,
         typeUpdate: experience.type,
@@ -89,8 +89,8 @@ const Experiences = () => {
         id: selectExperienceId,
         title: data.titleUpdate,
         company: data.companyUpdate,
-        startDate: data.startDateUpdate ? `${data.startDateUpdate}-01` : null,
-        endDate: data.endDateUpdate ? `${data.endDateUpdate}-01` : null,
+        startDate: data.startDateUpdate,
+        endDate: data.endDateUpdate,
         description: data.descriptionUpdate,
         location: data.locationUpdate,
         type: data.typeUpdate,
@@ -114,8 +114,8 @@ const Experiences = () => {
       const formattedData = {
         title: data.title,
         company: data.company,
-        startDate: data.startDate ? `${data.startDate}-01` : null,
-        endDate: data.endDate ? `${data.endDate}-01` : null,
+        startDate: data.startDate,
+        endDate: data.endDate,
         description: data.description,
         location: data.location,
         type: data.type,
@@ -352,7 +352,7 @@ const Experiences = () => {
               <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 {...register("startDate")}
-                type="month"
+                type="date"
                 placeholder="Start Date"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
               />
@@ -362,7 +362,7 @@ const Experiences = () => {
               <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 {...register("endDate")}
-                type="month"
+                type="date"
                 placeholder="End Date"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
               />
@@ -525,7 +525,7 @@ const Experiences = () => {
               <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 {...register("startDateUpdate")}
-                type="month"
+                type="date"
                 placeholder="Start Date"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
               />
@@ -535,7 +535,7 @@ const Experiences = () => {
               <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 {...register("endDateUpdate")}
-                type="month"
+                type="date"
                 placeholder="End Date"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
               />

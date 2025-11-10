@@ -54,7 +54,7 @@ const Hero = () => {
 
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-          <a href="#skills" className="bg-gray-800 cursor-pointer text-white px-8 py-3 rounded-full text-sm font-normal hover:bg-gray-700 transition-all duration-300 flex items-center gap-2 group">
+          <a href="#projects" className="bg-gray-800 cursor-pointer text-white px-8 py-3 rounded-full text-sm font-normal hover:bg-gray-700 transition-all duration-300 flex items-center gap-2 group">
             View My Work
             <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
           </a>
