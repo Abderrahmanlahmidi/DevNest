@@ -18,7 +18,6 @@ import { PrivateRoute } from "../private/privateRoute.jsx";
 import { PublicRoute } from "../private/publicRoute.jsx";
 
 
-
 export const router = createBrowserRouter([
   {
     path: "/",
